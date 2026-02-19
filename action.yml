@@ -1,0 +1,88 @@
+name: "PR Reviewer Assistant"
+description: "Automatically reviews PRs with coverage analysis, risk detection, complexity flags, and AI-powered summaries"
+author: "tommieseals"
+
+branding:
+  icon: "check-circle"
+  color: "green"
+
+inputs:
+  github-token:
+    description: "GitHub token for API access"
+    required: true
+    default: "${{ github.token }}"
+  
+  coverage-threshold:
+    description: "Minimum coverage percentage to pass"
+    required: false
+    default: "80"
+  
+  risk-patterns:
+    description: "JSON array of custom risk patterns to detect"
+    required: false
+    default: "[]"
+  
+  enable-ai-summary:
+    description: "Enable AI-powered change summary"
+    required: false
+    default: "false"
+  
+  ai-provider:
+    description: "AI provider: openai, anthropic, ollama, or custom"
+    required: false
+    default: "openai"
+  
+  ai-api-key:
+    description: "API key for AI provider"
+    required: false
+    default: ""
+  
+  ai-model:
+    description: "Model to use for AI summary"
+    required: false
+    default: "gpt-4o-mini"
+  
+  ollama-url:
+    description: "Ollama API URL for local LLM"
+    required: false
+    default: "http://localhost:11434"
+  
+  max-files:
+    description: "Maximum number of files to analyze"
+    required: false
+    default: "100"
+  
+  ignore-patterns:
+    description: "Glob patterns of files to ignore"
+    required: false
+    default: "[]"
+  
+  fail-on-risk:
+    description: "Fail the action if high-risk files detected"
+    required: false
+    default: "false"
+  
+  comment-mode:
+    description: "Comment mode: create, update, or both"
+    required: false
+    default: "update"
+
+outputs:
+  coverage-delta:
+    description: "Change in test coverage percentage"
+  
+  risk-files:
+    description: "Number of risky files detected"
+  
+  missing-docs:
+    description: "Number of files missing documentation"
+  
+  complexity-warnings:
+    description: "Number of complexity warnings"
+  
+  summary:
+    description: "Full review summary as JSON"
+
+runs:
+  using: "node20"
+  main: "dist/index.js"

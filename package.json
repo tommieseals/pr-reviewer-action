@@ -1,0 +1,47 @@
+{
+  "name": "pr-reviewer-action",
+  "version": "1.0.0",
+  "description": "GitHub Action that automatically reviews PRs with coverage analysis, risk detection, and AI-powered summaries",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.js -o dist --source-map --license licenses.txt",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tommieseals/pr-reviewer-action.git"
+  },
+  "keywords": [
+    "github-action",
+    "pull-request",
+    "code-review",
+    "coverage",
+    "ai",
+    "automation"
+  ],
+  "author": "tommieseals",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tommieseals/pr-reviewer-action/issues"
+  },
+  "homepage": "https://github.com/tommieseals/pr-reviewer-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "@octokit/rest": "^20.0.2",
+    "minimatch": "^9.0.3",
+    "openai": "^4.24.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.1",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

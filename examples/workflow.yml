@@ -1,0 +1,70 @@
+# Example PR Review Workflow
+#
+# Copy this file to .github/workflows/pr-review.yml in your repository
+# and customize as needed.
+
+name: PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Required permissions for posting PR comments
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    name: Review Pull Request
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: PR Reviewer Assistant
+        uses: tommieseals/pr-reviewer-action@v1
+        with:
+          # Required: GitHub token (automatically provided)
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # Optional: Coverage settings
+          coverage-threshold: 80
+          
+          # Optional: Risk detection settings
+          fail-on-risk: false
+          risk-patterns: |
+            [
+              {"pattern": "**/payments/**", "severity": "high", "category": "financial", "message": "Payment processing"},
+              {"pattern": "**/billing/**", "severity": "high", "category": "financial", "message": "Billing code"}
+            ]
+          
+          # Optional: Files to ignore
+          ignore-patterns: |
+            ["**/vendor/**", "**/node_modules/**", "**/*.min.js", "**/*.generated.*"]
+          
+          # Optional: AI-powered summaries
+          # Uncomment to enable with OpenAI
+          # enable-ai-summary: true
+          # ai-provider: openai
+          # ai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          # ai-model: gpt-4o-mini
+          
+          # Or use Anthropic Claude
+          # ai-provider: anthropic
+          # ai-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # ai-model: claude-3-haiku-20240307
+          
+          # Or use local Ollama (requires self-hosted runner)
+          # ai-provider: ollama
+          # ollama-url: http://localhost:11434
+          # ai-model: llama3.2
+          
+          # Comment behavior
+          comment-mode: update  # update | create | both
+          max-files: 100
+
+      # Optional: Use outputs in subsequent steps
+      - name: Check for High Risk Files
+        if: ${{ steps.review.outputs.risk-files > 0 }}
+        run: |
+          echo "⚠️ This PR contains ${{ steps.review.outputs.risk-files }} risky files!"
+          echo "Review summary: ${{ steps.review.outputs.summary }}"
